@@ -1,10 +1,7 @@
 <?php   
     require_once('./pdo/connect.php'); // подключаем бд
-    header("Cache-Control: no-cache, must-revalidate");
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    require_once("./pdo/webhook.php");
 
-    $userInfo = file_get_contents("./webhook.json"); // Это был выполнен запрос
-    $userInfo = json_decode($userInfo, true);
 
     $message = "";
     $hash = "";
@@ -13,17 +10,17 @@
         $name = trim(htmlentities(ucfirst($_POST['NewName'])));
         $family = trim(htmlentities(ucfirst($_POST['NewFamily'])));
         $imageinfo = $_FILES["img"];
-        if($imageinfo){
-            $imageinfo = getimagesize($_FILES['img']['tmp_name']);
-        }
-
         if($name != "" || $family != ""){
 
                 $userInfo['name'] = $name;
                 $userInfo['family'] = $family;
-                
 
-    
+            if($imageinfo["name"] !== ""){
+                echo $imageinfo["name"]."----";
+                $imageinfo = getimagesize($_FILES['img']['tmp_name']);
+            }
+
+
             if($imageinfo["mime"] == "image/jpg" || $imageinfo["mime"] == "image/png" || $imageinfo["mime"] == "image/jpeg"){
                 
         
@@ -42,24 +39,24 @@
                
             }
             else{
-           
-            } 
+
+            }
 
             file_put_contents("./webhook.json", json_encode($userInfo));
-          
+            header("Location: http://workshop");
         }
         else{
-            
+            header("Location: http://workshop");
         }     
         
        
        header("Location: http://workshop");
     }
     else{
-     
+
     }
 
-    if($userInfo){
+    if($userInfo){ // если данные получены, то возвращаем OK
         echo "<h1 id = 'success' >OK</h1>";
 
          $stmt = $pdo->prepare("SELECT * FROM `users` WHERE `hash` = :hash"); // Ищем этого пользователя по hash
@@ -152,10 +149,12 @@
                $img = json_decode($result['data'],true);
                echo "
                <li>
+                <a href = './users/thisUser.php?hash=".$result['hash']."'>
                     <img src = './fhotos/".$img['img_name']."'>
                     <span>
                       ".$result["name"]." ".$result["family"]."  
                     </span>
+                  </a>
                </li>
            ";
             }

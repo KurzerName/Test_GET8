@@ -70,3 +70,66 @@ table{
         }
     }
 }
+
+
+#aboutUser{
+    margin: 10% auto;
+    display: grid;
+    grid-template-columns: 1fr 0.5fr;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 0 black;
+    padding: 10px;
+    max-width: 20%;
+    text-align: center;
+    
+    #User{
+        border: 1px solid black;
+         align-self: center;
+        justify-self: center;
+        margin: 10px;
+        #UserAvatar{
+            
+            img{
+                max-width: 30%;
+            }
+        }
+        
+        
+        #UserInfo{
+            
+            #UserName{
+                
+                
+                
+            }
+            
+            
+            #UserFamily{
+                
+                    
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
